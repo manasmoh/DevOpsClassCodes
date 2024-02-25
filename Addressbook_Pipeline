@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+    tools {
+        maven 'my_maven'
+    }
+    stages {
+        stage('clonerepo') {
+            steps {
+                git 'https://github.com/manasmoh/DevOpsClassCodes.git'
+            }
+            
+        }
+    stage('compile') {
+            steps {
+                sh 'mvn compile'
+            }
+                    }
+    stage('CodeReview') {
+            steps {
+                sh 'mvn pmd:pmd'
+            }
+            post{
+                success{
+                    recordIssues(tools: [pmdParser(pattern: '**/pmd.xml')])
+                }
+            }
+            
+        }
+        
+    stage('UnitTesting') {
+        steps {
+          sh 'mvn test'
+        }
+        post {
+           success {
+            junit 'target/surefire-reports/*.xml'
+           }
+       }
+     }
+
+    }
+
+}
