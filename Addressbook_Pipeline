@@ -53,11 +53,7 @@ pipeline {
           sh 'mvn package'
         }
 	}
-	post {
-		success {
-	deploy adapters: [tomcat9(credentialsId: '9fc83c0d-448d-424f-93b2-7fab71b5892e', path: '', url: 'http://10.0.0.227:8081')], contextPath: null, war: '**/*.war'
-			}
-	    }
+
 
     }
 
